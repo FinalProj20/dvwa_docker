@@ -35,10 +35,8 @@ node {
     }
     
     stage('analyze') {
-            steps {
                 sh 'echo "docker.io/finalproj20/dvwa_docker:latest `pwd`/Dockerfile" > anchore_images'
                 anchore name: 'anchore_images'
-            }
     }
     
 }
