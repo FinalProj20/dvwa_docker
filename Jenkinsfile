@@ -33,4 +33,12 @@ node {
             app.push("latest")
         }
     }
+    
+    stage('analyze') {
+            steps {
+                sh 'echo "docker.io/exampleuser/examplerepo:latest `pwd`/Dockerfile" > anchore_images'
+                anchore name: 'anchore_images'
+            }
+    }
+    
 }
