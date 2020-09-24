@@ -35,8 +35,9 @@ node {
     }
     
     stage('analyze') {
-                sh 'echo "docker.io/finalproj20/dvwa_docker:latest `pwd`/Dockerfile" > anchore_images'
-                anchore name: 'anchore_images'
+        def imageLine = 'openjdk:8-jre-alpine'`
+        writeFile file: 'anchore_images', text: imageLine`
+        anchore name: 'anchore_images'`
     }
     
 }
