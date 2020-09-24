@@ -35,7 +35,7 @@ node {
     }
     
     stage('analyze') {
-        def imageLine = 'openjdk:8-jre-alpine'`
+        def imageLine = 'finalproj20/dvwa_docker'`
         writeFile file: 'anchore_images', text: imageLine`
         anchore name: 'anchore_images'`
     }
