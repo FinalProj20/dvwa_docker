@@ -35,7 +35,7 @@ node {
     }
     
     stage('analyze') {
-        def imageLine = 'finalproj20/dvwa_docker'`
+        def imageLine = 'finalproj20/dvwa_docker'
         writeFile file: 'anchore_images', text: imageLine`
         anchore name: 'anchore_images'`
     }
