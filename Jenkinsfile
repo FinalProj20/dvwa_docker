@@ -15,9 +15,7 @@ node {
     }
 
     stage('Aqua Scan') {
-        steps{
             aquaMicroscanner imageName: 'finalproj20/dvwa_docker', notCompliesCmd: '', onDisallowed: 'ignore', outputFormat: 'html'
-        }
     }
 
     stage('Push image') {
