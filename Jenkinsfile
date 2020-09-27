@@ -14,12 +14,9 @@ node {
         app = docker.build("finalproj20/dvwa_docker")
     }
 
-    stage('Test image') {
-        /* Ideally, we would run a test framework against our image.
-         * For this example, we're using a Volkswagen-type approach ;-) */
-
-        app.inside {
-            sh 'echo "Tests passed"'
+    stage('Aqua Scan') {
+        steps{
+            aquaMicroscanner imageName: 'finalproj20/dvwa_docker', notCompliesCmd: '', onDisallowed: 'ignore', outputFormat: 'html'
         }
     }
 
