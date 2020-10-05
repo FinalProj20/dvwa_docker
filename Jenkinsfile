@@ -14,9 +14,7 @@ node {
         app = docker.build("finalproj20/dvwa_docker")
     }
 
-    stage('Aqua Scan') {
-            aquaMicroscanner imageName: 'finalproj20/dvwa_docker', notCompliesCmd: '', onDisallowed: 'ignore', outputFormat: 'html'
-    }
+    
 
     stage('Push image') {
         /* Finally, we'll push the image with two tags:
@@ -29,10 +27,38 @@ node {
         }
     }
     
-    stage('analyze') {
+    stage('Aqua Scan') {
+            aquaMicroscanner imageName: 'finalproj20/dvwa_docker', notCompliesCmd: '', onDisallowed: 'ignore', outputFormat: 'html'
+    }
+    
+    stage('Anchore Scan') {
         def imageLine = 'finalproj20/dvwa_docker'
         writeFile file: 'anchore_images', text: imageLine
         anchore name: 'anchore_images'
     }
+    
+    docker.image('finalproj20/dvwa_docker').withRun('-p 8000:80') {
+        
+            stage('Arachni') {
+            sh '''
+                mkdir -p $PWD/reports $PWD/artifacts;
+                docker run \
+                    -v $PWD/reports:/arachni/reports ahannigan/docker-arachni \
+                    bin/arachni http://172.17.0.1:8000 --report-save-path=reports/example.io.afr;
+                docker run --name=arachni_report  \
+                    -v $PWD/reports:/arachni/reports ahannigan/docker-arachni \
+                    bin/arachni_reporter reports/example.io.afr --reporter=html:outfile=reports/example-io-report.html.zip;
+                docker cp arachni_report:/arachni/reports/example-io-report.html.zip $PWD/artifacts;
+                docker rm arachni_report;
+            '''
+            archiveArtifacts artifacts: 'artifacts/**', fingerprint: true
+            }
+            
+            stage('BurpSuite Scan'){
+                echo 'Running Burp Scanner...'
+                sh label: '', script: '''curl -vgw "\n" -X POST 'http://localhost:8082/api/L8ZsyNxm3EAvbwdZBCiWaBSaywhAGu8D/v0.1/scan' -d '{"application_logins":[{"password":"password","username":"admin"}],"name":"DVWA_Jenkins_Scan2","scope":{"include":[{"rule":"http://172.17.0.1:8000"}],"type":"SimpleScope"},"urls":["http://172.17.0.1:8000"]}'
+            }
+        
+        }
     
 }
