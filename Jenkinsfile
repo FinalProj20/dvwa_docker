@@ -31,11 +31,11 @@ node {
             aquaMicroscanner imageName: 'finalproj20/dvwa_docker', notCompliesCmd: '', onDisallowed: 'ignore', outputFormat: 'html'
     }
     
-    stage('Anchore Scan') {
-        def imageLine = 'finalproj20/dvwa_docker'
-        writeFile file: 'anchore_images', text: imageLine
-        anchore name: 'anchore_images'
-    }
+   /* stage('Anchore Scan') {
+    *    def imageLine = 'finalproj20/dvwa_docker'
+     *   writeFile file: 'anchore_images', text: imageLine
+      *  anchore name: 'anchore_images'
+    *} */
     
     docker.image('finalproj20/dvwa_docker').withRun('-p 8000:80') {
             stage('Setting Up the App'){
@@ -45,7 +45,7 @@ node {
                 }
             }
                 
-            stage('Arachni') {
+            /*stage('Arachni') {
             sh '''
                 mkdir -p $PWD/reports $PWD/artifacts;
                 docker run \
@@ -59,7 +59,7 @@ node {
             '''
             archiveArtifacts artifacts: 'artifacts/**', fingerprint: true
             }
-            
+            */
             stage('BurpSuite Scan') {
                         build job: 'Burp-Dvwa', parameters: [
                         string(name: 'true')
