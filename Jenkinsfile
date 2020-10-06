@@ -38,7 +38,12 @@ node {
     }
     
     docker.image('finalproj20/dvwa_docker').withRun('-p 8000:80') {
-        
+            stage('Setting Up the App'){
+                script {
+                  env.TAG_PROGRESS = input message: 'User input required',
+                      parameters: [choice(name: 'TAG_PROGRESS', choices: 'no\nyes', description: 'Choose "yes" if the pipeline can continue')]
+            }
+                
             stage('Arachni') {
             sh '''
                 mkdir -p $PWD/reports $PWD/artifacts;
@@ -54,10 +59,11 @@ node {
             archiveArtifacts artifacts: 'artifacts/**', fingerprint: true
             }
             
-            stage('BurpSuite Scan'){
-                build job: 'Burp-Dvwa', parameters: [
-                string(name: 'true')
-                ]
+            stage('BurpSuite Scan') {
+                        build job: 'Burp-Dvwa', parameters: [
+                        string(name: 'true')
+                        ]
+                    
             }
         
         }
