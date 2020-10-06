@@ -42,6 +42,7 @@ node {
                 script {
                   env.TAG_PROGRESS = input message: 'User input required',
                       parameters: [choice(name: 'TAG_PROGRESS', choices: 'no\nyes', description: 'Choose "yes" if the pipeline can continue')]
+                }
             }
                 
             stage('Arachni') {
