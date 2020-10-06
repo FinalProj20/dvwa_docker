@@ -55,8 +55,9 @@ node {
             }
             
             stage('BurpSuite Scan'){
-                echo 'Running Burp Scanner...'
-                sh label: '', script: '''curl -vgw "\n" -X POST 'http://localhost:8082/api/L8ZsyNxm3EAvbwdZBCiWaBSaywhAGu8D/v0.1/scan' -d '{"application_logins":[{"password":"password","username":"admin"}],"name":"DVWA_Jenkins_Scan2","scope":{"include":[{"rule":"http://172.17.0.1:8000"}],"type":"SimpleScope"},"urls":["http://172.17.0.1:8000"]}' '''
+                build job: 'Burp-Dvwa', parameters: [
+                string(name: 'true')
+                ]
             }
         
         }
