@@ -1,7 +1,5 @@
 FROM debian:9.2
 
-LABEL maintainer "opsxcq@strm.sh"
-
 RUN apt-get update && \
     apt-get upgrade -y && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
