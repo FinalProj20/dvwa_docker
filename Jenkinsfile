@@ -31,10 +31,10 @@ node {
             aquaMicroscanner imageName: 'finalproj20/dvwa_docker', notCompliesCmd: '', onDisallowed: 'ignore', outputFormat: 'html'
     }
     
-   stage('Anchore Scan') {
-        def imageLine = 'finalproj20/dvwa_docker'
-        writeFile file: 'anchore_images', text: imageLine
-        anchore name: 'anchore_images'
+    stage('Anchore Scan') {
+            def imageLine = 'finalproj20/dvwa_docker'
+            writeFile file: 'anchore_images', text: imageLine
+            anchore name: 'anchore_images'
     } 
     
     docker.image('finalproj20/dvwa_docker').withRun('-p 8000:80') {
