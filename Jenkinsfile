@@ -27,9 +27,9 @@ node {
         }
     }
     
-    /*stage('Aqua Scan') {
+    stage('Aqua Scan') {
             aquaMicroscanner imageName: 'finalproj20/dvwa_docker', notCompliesCmd: '', onDisallowed: 'ignore', outputFormat: 'html'
-    }*/
+    }
     
    stage('Anchore Scan') {
         def imageLine = 'finalproj20/dvwa_docker'
@@ -60,12 +60,12 @@ node {
             archiveArtifacts artifacts: 'artifacts/**', fingerprint: true
             }
             
-            /*stage('BurpSuite Scan') {
+            stage('BurpSuite Scan') {
                         build job: 'Burp-Dvwa', parameters: [
                         string(name: 'true')
                         ]
                     
-            }*/
+            }
         
         }
     
